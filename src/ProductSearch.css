@@ -1,0 +1,20 @@
+.flex{
+    display: flex;
+    justify-content: center;
+    font-size: 35px;
+}
+.vto{
+    padding-left: 25px;
+}
+.print-results{
+    font-size: 30px;
+    padding: 0px;
+}
+.cod{
+    font-size: 150px;
+    padding: 0px;
+    margin: 0px;
+}
+.ingreso{
+    font-size: 45px;
+}

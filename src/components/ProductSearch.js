@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
+import '../ProductSearch.css'; // Importar el archivo CSS
 
 function ProductSearch() {
   const [todosProductos, setTodosProductos] = useState([]);
   const [productos, setProductos] = useState([]);
   const [codigoProducto, setCodigoProducto] = useState('');
   const [codigoEAN, setCodigoEAN] = useState('');
-  const [fechaIngreso, setFechaIngreso] = useState(null); // Cambiado a null para mejor manejo
-  const [fechaVencimiento, setFechaVencimiento] = useState(null); // Cambiado a null para mejor manejo
+  const [fechaIngreso, setFechaIngreso] = useState(null);
+  const [fechaVencimiento, setFechaVencimiento] = useState(null);
+  const [base, setBase] = useState('');
+  const [error, setError] = useState(''); // Estado para manejar el mensaje de error
 
   useEffect(() => {
     async function fetchProductos() {
@@ -35,6 +38,12 @@ function ProductSearch() {
       (codigoProducto && producto.Codigo.toString().includes(codigoProducto)) ||
       (codigoEAN && producto['EAN Unidad'].toString().includes(codigoEAN))
     );
+
+    if (resultados.length === 0) {
+      setError('No se encontraron productos coincidentes. Solicitar al encargado que se complete los datos correspondiente del producto.');
+    } else {
+      setError('');
+    }
 
     setProductos(resultados);
   };
@@ -79,6 +88,7 @@ function ProductSearch() {
         `EAN: ${producto['EAN Unidad']}`,
         `Proveedor: ${producto.Proveedor}`,
         `Rubro: ${producto.Rubro}`,
+        `Base: ${base}`, // Agregar la base a los resultados
         `Fecha de Ingreso: ${formatDate(fechaIngreso)}`, // Asegurar que se obtiene correctamente
         `Fecha de Vencimiento: ${formatDate(fechaVencimiento)}` // Asegurar que se obtiene correctamente
       ];
@@ -102,8 +112,8 @@ function ProductSearch() {
 
   return (
     <div>
-      <h2>Buscar Producto</h2>
-      <form onSubmit={handleSearch}>
+      <h2 className="no-print">Buscar Producto</h2>
+      <form onSubmit={handleSearch} className="no-print">
         <label>Código de Producto:</label>
         <input
           type="text"
@@ -132,27 +142,47 @@ function ProductSearch() {
           onChange={(e) => setFechaVencimiento(e.target.value)}
         />
         <br />
+        <label>Base:</label>
+        <input
+          type="number"
+          value={base}
+          onChange={(e) => setBase(e.target.value)}
+          min="10"
+          max="99"
+        />
+        <br />
         <button type="submit">Buscar</button>
       </form>
 
-      <h3>Resultados:</h3>
-      <ul>
+      {error && <p className="error-message">{error}</p>} {/* Mostrar mensaje de error si existe */}
+
+      <h3 className='no-print'>Resultados:</h3>
+      <ul className="print-results">
         {productos.map((producto, index) => (
           <li key={index}>
-            <p>Código: {producto.Codigo}</p>
-            <p>Descripción: {producto.Articulo_descripcion}</p>
-            <p>EAN: {producto['EAN Unidad']}</p>
-            <p>Proveedor: {producto.Proveedor}</p>
-            <p>Rubro: {producto.Rubro}</p>
-            <p>Fecha de Ingreso: {formatDate(fechaIngreso)}</p>
-            <p>Fecha de Vencimiento: {formatDate(fechaVencimiento)}</p>
+            <h1 className='ingreso'>INGRESO: {formatDate(fechaIngreso)}</h1>
+            <h1 className='cod'> {producto.Codigo}</h1>
+            <h1> {producto.Articulo_descripcion}</h1>
+            <div className='flex'>
+              <h1 className='base'>BASE: {base}</h1>
+              <h1 className='vto'>VTO: {formatDate(fechaVencimiento)}</h1>
+            </div>
           </li>
         ))}
       </ul>
 
       {/* Botones para imprimir y guardar como PDF */}
-      <button onClick={imprimirDatos}>Imprimir Resultados</button>
-      <button onClick={guardarComoPDF}>Guardar como PDF</button>
+      <button onClick={imprimirDatos} className="no-print">Imprimir Resultados</button>
+      <button onClick={guardarComoPDF} className="no-print">Guardar como PDF</button>
+
+      {/* CSS para ocultar el formulario y título durante la impresión */}
+      <style jsx>{`
+        @media print {
+          .no-print {
+            display: none;
+          }
+        }
+      `}</style>
     </div>
   );
 }
