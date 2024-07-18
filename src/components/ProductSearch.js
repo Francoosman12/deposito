@@ -30,6 +30,20 @@ function ProductSearch() {
     fetchProductos();
   }, []);
 
+  useEffect(() => {
+    if (codigoProducto) {
+      const producto = todosProductos.find(producto => producto.Codigo.toString() === codigoProducto);
+      if (producto) {
+        setCodigoEAN(producto['EAN Unidad']);
+      }
+    } else if (codigoEAN) {
+      const producto = todosProductos.find(producto => producto['EAN Unidad'].toString() === codigoEAN);
+      if (producto) {
+        setCodigoProducto(producto.Codigo);
+      }
+    }
+  }, [codigoProducto, codigoEAN, todosProductos]);
+
   const handleSearch = (event) => {
     event.preventDefault();
 
@@ -71,38 +85,46 @@ function ProductSearch() {
   };
 
   const imprimirDatos = () => {
-    window.print();
+    if (validarCampos()) {
+      window.print();
+    }
   };
 
   const guardarComoPDF = () => {
-    const doc = new jsPDF();
-    let y = 10;
-    doc.text('Resultados de Búsqueda', 10, y);
-    y += 10;
+    if (validarCampos()) {
+      const doc = new jsPDF();
+      let y = 10;
+      doc.text('Resultados de Búsqueda', 10, y);
+      y += 10;
 
-    productos.forEach((producto, index) => {
-      const text = [
-        `Producto ${index + 1}:`,
-        `Código: ${producto.Codigo}`,
-        `Descripción: ${producto.Articulo_descripcion}`,
-        `EAN: ${producto['EAN Unidad']}`,
-        `Proveedor: ${producto.Proveedor}`,
-        `Rubro: ${producto.Rubro}`,
-        `Base: ${base}`,
-        `Fecha de Ingreso: ${formatDate(fechaIngreso)}`,
-        `Fecha de Vencimiento: ${formatDate(fechaVencimiento)}`
-      ];
+      productos.forEach((producto, index) => {
+        const text = [
+          `Producto ${index + 1}:`,
+          `Código: ${producto.Codigo}`,
+          `Descripción: ${producto.Articulo_descripcion}`,
+          `EAN: ${producto['EAN Unidad']}`,
+          `Proveedor: ${producto.Proveedor}`,
+          `Rubro: ${producto.Rubro}`,
+          `Base: ${base}`,
+          `Fecha de Ingreso: ${formatDate(fechaIngreso)}`,
+          `Fecha de Vencimiento: ${formatDate(fechaVencimiento)}`
+        ];
 
-      text.forEach(line => {
-        doc.text(line, 10, y);
-        y += 10;
+        text.forEach(line => {
+          doc.text(line, 10, y);
+          y += 10;
+        });
+
+        y += 5;
       });
 
-      y += 5;
-    });
+      const fileName = `productos_${codigoProducto}_${formatDate(fechaIngreso)}.pdf`;
+      doc.save(fileName);
+    }
+  };
 
-    const fileName = `productos_${codigoProducto}_${formatDate(fechaIngreso)}.pdf`;
-    doc.save(fileName);
+  const validarCampos = () => {
+    return fechaVencimiento && base;
   };
 
   return (
@@ -167,8 +189,8 @@ function ProductSearch() {
         ))}
       </ul>
 
-      <button onClick={imprimirDatos} className="no-print">Imprimir Resultados</button>
-      <button onClick={guardarComoPDF} className="no-print">Guardar como PDF</button>
+      <button onClick={imprimirDatos} className="no-print" disabled={!validarCampos()}>Imprimir Resultados</button>
+      <button onClick={guardarComoPDF} className="no-print" disabled={!validarCampos()}>Guardar como PDF</button>
 
       <style jsx>{`
         @media print {
