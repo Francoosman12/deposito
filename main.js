@@ -9,35 +9,29 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: false, // Habilita la integración de Node.js en la página web
-      contextIsolation: true, // Aísla el contexto del proceso renderer
-      preload: path.join(__dirname, 'preload.js') // Archivo de preload para ejecutar código en el contexto de la página
-    }
+      nodeIntegration: true, // Habilita Node.js en el contexto de la ventana del navegador.
+    },
   });
 
-  mainWindow.loadURL(
-    process.env.ELECTRON_START_URL ||
-    url.format({
-      pathname: path.join(__dirname, 'index.html'),
-      protocol: 'file:',
-      slashes: true
-    })
-  );
+  mainWindow.loadURL('https://tudominio.netlify.app'); // Cambia por la URL de tu aplicación desplegada en Netlify.
 
-  mainWindow.on('closed', () => {
+  // Abre las herramientas de desarrollo de Electron.
+  // mainWindow.webContents.openDevTools();
+
+  mainWindow.on('closed', function () {
     mainWindow = null;
   });
 }
 
 app.on('ready', createWindow);
 
-app.on('window-all-closed', () => {
+app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-app.on('activate', () => {
+app.on('activate', function () {
   if (mainWindow === null) {
     createWindow();
   }
