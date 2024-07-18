@@ -13,7 +13,7 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadURL('https://tudominio.netlify.app'); // Cambia por la URL de tu aplicación desplegada en Netlify.
+  mainWindow.loadURL('https://deposito-pdv.netlify.app'); // Cambia por la URL de tu aplicación desplegada en Netlify.
 
   // Abre las herramientas de desarrollo de Electron.
   // mainWindow.webContents.openDevTools();
