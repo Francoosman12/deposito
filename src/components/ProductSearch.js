@@ -92,7 +92,7 @@ function ProductSearch() {
 
   const guardarComoPDF = () => {
     if (validarCampos()) {
-      const doc = new jsPDF();
+      const doc = new jsPDF('landscape');
       let y = 10;
       doc.text('Resultados de Búsqueda', 10, y);
       y += 10;
@@ -191,14 +191,6 @@ function ProductSearch() {
 
       <button onClick={imprimirDatos} className="no-print" disabled={!validarCampos()}>Imprimir Resultados</button>
       <button onClick={guardarComoPDF} className="no-print" disabled={!validarCampos()}>Guardar como PDF</button>
-
-      <style jsx>{`
-        @media print {
-          .no-print {
-            display: none;
-          }
-        }
-      `}</style>
     </div>
   );
 }

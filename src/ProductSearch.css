@@ -1,20 +1,101 @@
-.flex{
+/* Estilos para el formulario */
+form.no-print {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  form.no-print label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 10px;
+  }
+  
+  form.no-print input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  form.no-print button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  form.no-print button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    margin-right: 10px;
+  }
+  
+  form.no-print button[type="button"] {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  /* Estilos para los resultados impresos */
+  .flex {
     display: flex;
     justify-content: center;
     font-size: 35px;
-}
-.vto{
+  }
+  
+  .vto {
     padding-left: 25px;
-}
-.print-results{
+  }
+  
+  .print-results {
     font-size: 30px;
     padding: 0px;
-}
-.cod{
+  }
+  
+  .cod {
     font-size: 150px;
     padding: 0px;
     margin: 0px;
-}
-.ingreso{
+  }
+  
+  .ingreso {
     font-size: 45px;
-}
+  }
+  
+  /* Estilos de impresión */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+  
+    @page {
+      size: A4 landscape;
+      margin: 10mm;
+    }
+  
+    .print-results li {
+      font-size: 20px; /* Ajustar el tamaño de fuente para que los resultados quepan en una página */
+    }
+  
+    .flex {
+      font-size: 25px;
+    }
+  
+    .cod {
+      font-size: 150px;
+    }
+  
+    .ingreso {
+      font-size: 50px;
+    }
+  }
+  
