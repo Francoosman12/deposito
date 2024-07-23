@@ -71,6 +71,10 @@ form.no-print {
     font-size: 45px;
   }
   
+  .botones{
+    margin: 30px;
+    padding: 10px;
+  }
   /* Estilos de impresión */
   @media print {
     .no-print {

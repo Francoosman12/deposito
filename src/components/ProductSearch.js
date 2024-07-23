@@ -189,8 +189,8 @@ function ProductSearch() {
         ))}
       </ul>
 
-      <button onClick={imprimirDatos} className="no-print" disabled={!validarCampos()}>Imprimir Resultados</button>
-      <button onClick={guardarComoPDF} className="no-print" disabled={!validarCampos()}>Guardar como PDF</button>
+      <button onClick={imprimirDatos} className="no-print botones" disabled={!validarCampos()}>Imprimir Resultados</button>
+      <button onClick={guardarComoPDF} className="no-print botones" disabled={!validarCampos()}>Guardar como PDF</button>
     </div>
   );
 }
