@@ -74,6 +74,7 @@ form.no-print {
   .botones{
     margin: 30px;
     padding: 10px;
+    
   }
   /* Estilos de impresión */
   @media print {
